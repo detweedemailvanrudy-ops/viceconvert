@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vice Converter</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b0713">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
     <style>
-        /* GTA VI / Vice City Kleurenpalet */
+        /* GTA VI / Vice City Kleurenpalet & Sfeer */
         :root {
             --bg-color: #0b0713;
-            --card-bg: rgba(26, 17, 43, 0.75);
+            --card-bg: rgba(15, 8, 32, 0.70);
             --neon-pink: #ff007f;
             --neon-cyan: #00f0ff;
             --text-color: #ffffff;
@@ -23,45 +28,63 @@
         }
 
         body {
-            background: linear-gradient(135deg, var(--bg-color) 0%, #1a0b2e 100%);
+            /* Dynamische Vice City Sunset gradiënt */
+            background: linear-gradient(180deg, #140526 0%, #3b0d4b 40%, #8c1c66 65%, #e65c40 85%, #ff9e40 100%);
+            background-attachment: fixed;
             color: var(--text-color);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
+        }
+
+        /* Subtiele retro VHS/Scanline vibe over de achtergrond */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 10, 36, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 0;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
         }
 
         /* De App Container */
         .app-container {
+            position: relative;
+            z-index: 1;
             background: var(--card-bg);
             width: 100%;
             max-width: 450px;
             padding: 30px;
-            border-radius: 16px;
+            border-radius: 20px;
             border: 2px solid var(--neon-pink);
-            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3), inset 0 0 15px rgba(0, 240, 255, 0.1);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.4), inset 0 0 20px rgba(0, 240, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
         /* GTA VI Style Header */
         h1 {
             text-align: center;
-            font-size: 2.5rem;
+            font-size: 2.6rem;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             margin-bottom: 30px;
             color: #fff;
             text-shadow: 3px 3px 0px var(--neon-pink), -1px -1px 0px var(--neon-cyan);
             font-style: italic;
         }
 
-        /* Secties (Snelheid, Temperatuur & Lengte) */
+        /* Secties */
         .section {
             margin-bottom: 25px;
             padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 0, 127, 0.2);
+            border-bottom: 1px solid rgba(255, 0, 127, 0.25);
         }
 
         .section:last-child {
@@ -76,7 +99,7 @@
             letter-spacing: 1px;
             color: var(--neon-cyan);
             margin-bottom: 12px;
-            text-shadow: 0 0 5px rgba(0, 240, 255, 0.4);
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
         }
 
         /* Input Groepen */
@@ -84,13 +107,12 @@
             display: flex;
             align-items: center;
             margin-bottom: 12px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(157, 140, 181, 0.3);
+            background: rgba(5, 2, 12, 0.6);
+            border: 1px solid rgba(255, 0, 127, 0.3);
             border-radius: 8px;
             transition: all 0.3s ease;
         }
 
-        /* Rij met twee inputs naast elkaar (voor ft & in) */
         .input-row {
             display: flex;
             gap: 10px;
@@ -103,13 +125,12 @@
 
         .input-group:focus-within {
             border-color: var(--neon-cyan);
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
         }
 
-        /* Afwisselende focuskleuren voor de sfeer */
         .section:nth-child(even) .input-group:focus-within {
             border-color: var(--neon-pink);
-            box-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
+            box-shadow: 0 0 12px rgba(255, 0, 127, 0.6);
         }
 
         input {
@@ -118,12 +139,12 @@
             border: none;
             outline: none;
             color: #fff;
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             padding: 12px 15px;
             width: 100%;
         }
 
-        /* Unit Labels (KM/H, MPH, etc.) */
+        /* Unit Labels */
         .unit {
             padding: 12px 15px;
             font-weight: bold;
@@ -131,7 +152,8 @@
             color: var(--text-muted);
             min-width: 75px;
             text-align: right;
-            border-left: 1px solid rgba(157, 140, 181, 0.2);
+            border-left: 1px solid rgba(255, 0, 127, 0.2);
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -184,7 +206,15 @@
     </div>
 
     <script>
-        // Helper om decimalen af te ronden
+        // Registreer de Service Worker voor PWA functionaliteit
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker geregistreerd!', reg))
+                    .catch(err => console.log('Service Worker gefaald:', err));
+            });
+        }
+
         function roundValue(val, decimals = 2) {
             if (isNaN(val) || val === 0) return '';
             return parseFloat(val.toFixed(decimals));
@@ -218,12 +248,11 @@
             celsiusInput.value = fahrenheitInput.value === '' ? '' : roundValue((f - 32) * 5/9);
         });
 
-        // --- Lengte Logica (Meter <-> Feet & Inches) ---
+        // --- Lengte Logica ---
         const meterInput = document.getElementById('meter');
         const feetInput = document.getElementById('feet');
         const inchesInput = document.getElementById('inches');
 
-        // Van Meter naar Feet + Inches
         meterInput.addEventListener('input', () => {
             if (meterInput.value === '') {
                 feetInput.value = '';
@@ -232,15 +261,13 @@
             }
             const m = parseFloat(meterInput.value);
             const totFeet = m * 3.28084;
-            
             const ft = Math.floor(totFeet);
             const remainderInches = (totFeet - ft) * 12;
 
             feetInput.value = ft;
-            inchesInput.value = roundValue(remainderInches, 1); // 1 decimaal voor inches is vaak 't mooist
+            inchesInput.value = roundValue(remainderInches, 1);
         });
 
-        // Van Feet of Inches naar Meter
         function convertImperialToMetric() {
             const ft = parseFloat(feetInput.value) || 0;
             const ins = parseFloat(inchesInput.value) || 0;
@@ -249,8 +276,6 @@
                 meterInput.value = '';
                 return;
             }
-
-            // Totaal in inches omrekenen naar meters (1 inch = 0.0254 meter)
             const totalInches = (ft * 12) + ins;
             meterInput.value = roundValue(totalInches * 0.0254);
         }
