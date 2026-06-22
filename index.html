@@ -208,12 +208,13 @@
     <script>
         // Registreer de Service Worker voor PWA functionaliteit
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('Service Worker geregistreerd!', reg))
-                    .catch(err => console.log('Service Worker gefaald:', err));
-            });
-        }
+    window.addEventListener('load', () => {
+        // Dit pakt automatisch de juiste submap op GitHub Pages
+        navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('Service Worker geregistreerd!', reg))
+            .catch(err => console.log('Service Worker gefaald:', err));
+    });
+}
 
         function roundValue(val, decimals = 2) {
             if (isNaN(val) || val === 0) return '';
