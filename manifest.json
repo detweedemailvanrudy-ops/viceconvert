@@ -1,7 +1,7 @@
 {
   "name": "Vice Converter",
   "short_name": "ViceConvert",
-  "start_url": "index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0b0713",
   "theme-color": "#0b0713",
