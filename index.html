@@ -57,7 +57,7 @@
             font-style: italic;
         }
 
-        /* Secties (Snelheid & Temperatuur) */
+        /* Secties (Snelheid, Temperatuur & Lengte) */
         .section {
             margin-bottom: 25px;
             padding-bottom: 20px;
@@ -75,7 +75,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--neon-cyan);
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             text-shadow: 0 0 5px rgba(0, 240, 255, 0.4);
         }
 
@@ -128,7 +128,6 @@
     <div class="app-container">
         <h1>VICE CONVERT</h1>
 
-        <!-- SNELHEID SECTIE -->
         <div class="section">
             <h2>Snelheid</h2>
             <div class="input-group">
@@ -141,7 +140,6 @@
             </div>
         </div>
 
-        <!-- TEMPERATUUR SECTIE -->
         <div class="section">
             <h2>Temperatuur</h2>
             <div class="input-group">
@@ -151,6 +149,18 @@
             <div class="input-group">
                 <input type="number" id="fahrenheit" placeholder="0" step="any">
                 <div class="unit">°F</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Lengte</h2>
+            <div class="input-group">
+                <input type="number" id="meter" placeholder="0.00" step="any">
+                <div class="unit">Meter</div>
+            </div>
+            <div class="input-group">
+                <input type="number" id="feet" placeholder="0.00" step="any">
+                <div class="unit">FT (Feet)</div>
             </div>
         </div>
     </div>
@@ -188,6 +198,20 @@
         fahrenheitInput.addEventListener('input', () => {
             const f = parseFloat(fahrenheitInput.value);
             celsiusInput.value = fahrenheitInput.value === '' ? '' : roundValue((f - 32) * 5/9);
+        });
+
+        // --- Lengte Logica ---
+        const meterInput = document.getElementById('meter');
+        const feetInput = document.getElementById('feet');
+
+        meterInput.addEventListener('input', () => {
+            const m = parseFloat(meterInput.value);
+            feetInput.value = meterInput.value === '' ? '' : roundValue(m * 3.28084);
+        });
+
+        feetInput.addEventListener('input', () => {
+            const ft = parseFloat(feetInput.value);
+            meterInput.value = feetInput.value === '' ? '' : roundValue(ft * 0.3048);
         });
     </script>
 </body>
