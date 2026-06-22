@@ -90,12 +90,24 @@
             transition: all 0.3s ease;
         }
 
+        /* Rij met twee inputs naast elkaar (voor ft & in) */
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-row .input-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
         .input-group:focus-within {
             border-color: var(--neon-cyan);
             box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
         }
 
-        .input-group:nth-child(3):focus-within {
+        /* Afwisselende focuskleuren voor de sfeer */
+        .section:nth-child(even) .input-group:focus-within {
             border-color: var(--neon-pink);
             box-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
         }
@@ -158,18 +170,24 @@
                 <input type="number" id="meter" placeholder="0.00" step="any">
                 <div class="unit">Meter</div>
             </div>
-            <div class="input-group">
-                <input type="number" id="feet" placeholder="0.00" step="any">
-                <div class="unit">FT (Feet)</div>
+            <div class="input-row">
+                <div class="input-group">
+                    <input type="number" id="feet" placeholder="0" step="1">
+                    <div class="unit">FT</div>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="inches" placeholder="0" step="any">
+                    <div class="unit">IN</div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Handige helper om decimalen netjes te houden (max 2, tenzij heel klein)
-        function roundValue(val) {
+        // Helper om decimalen af te ronden
+        function roundValue(val, decimals = 2) {
             if (isNaN(val) || val === 0) return '';
-            return parseFloat(val.toFixed(2));
+            return parseFloat(val.toFixed(decimals));
         }
 
         // --- Snelheid Logica ---
@@ -200,19 +218,45 @@
             celsiusInput.value = fahrenheitInput.value === '' ? '' : roundValue((f - 32) * 5/9);
         });
 
-        // --- Lengte Logica ---
+        // --- Lengte Logica (Meter <-> Feet & Inches) ---
         const meterInput = document.getElementById('meter');
         const feetInput = document.getElementById('feet');
+        const inchesInput = document.getElementById('inches');
 
+        // Van Meter naar Feet + Inches
         meterInput.addEventListener('input', () => {
+            if (meterInput.value === '') {
+                feetInput.value = '';
+                inchesInput.value = '';
+                return;
+            }
             const m = parseFloat(meterInput.value);
-            feetInput.value = meterInput.value === '' ? '' : roundValue(m * 3.28084);
+            const totFeet = m * 3.28084;
+            
+            const ft = Math.floor(totFeet);
+            const remainderInches = (totFeet - ft) * 12;
+
+            feetInput.value = ft;
+            inchesInput.value = roundValue(remainderInches, 1); // 1 decimaal voor inches is vaak 't mooist
         });
 
-        feetInput.addEventListener('input', () => {
-            const ft = parseFloat(feetInput.value);
-            meterInput.value = feetInput.value === '' ? '' : roundValue(ft * 0.3048);
-        });
+        // Van Feet of Inches naar Meter
+        function convertImperialToMetric() {
+            const ft = parseFloat(feetInput.value) || 0;
+            const ins = parseFloat(inchesInput.value) || 0;
+
+            if (feetInput.value === '' && inchesInput.value === '') {
+                meterInput.value = '';
+                return;
+            }
+
+            // Totaal in inches omrekenen naar meters (1 inch = 0.0254 meter)
+            const totalInches = (ft * 12) + ins;
+            meterInput.value = roundValue(totalInches * 0.0254);
+        }
+
+        feetInput.addEventListener('input', convertImperialToMetric);
+        inchesInput.addEventListener('input', convertImperialToMetric);
     </script>
 </body>
 </html>
