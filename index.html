@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vice Converter</title>
+    <style>
+        /* GTA VI / Vice City Kleurenpalet */
+        :root {
+            --bg-color: #0b0713;
+            --card-bg: rgba(26, 17, 43, 0.75);
+            --neon-pink: #ff007f;
+            --neon-cyan: #00f0ff;
+            --text-color: #ffffff;
+            --text-muted: #9d8cb5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-color) 0%, #1a0b2e 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* De App Container */
+        .app-container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 450px;
+            padding: 30px;
+            border-radius: 16px;
+            border: 2px solid var(--neon-pink);
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3), inset 0 0 15px rgba(0, 240, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        /* GTA VI Style Header */
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            color: #fff;
+            text-shadow: 3px 3px 0px var(--neon-pink), -1px -1px 0px var(--neon-cyan);
+            font-style: italic;
+        }
+
+        /* Secties (Snelheid & Temperatuur) */
+        .section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 0, 127, 0.2);
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--neon-cyan);
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px rgba(0, 240, 255, 0.4);
+        }
+
+        /* Input Groepen */
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(157, 140, 181, 0.3);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group:focus-within {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+
+        .input-group:nth-child(3):focus-within {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
+        }
+
+        input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 1.2rem;
+            padding: 12px 15px;
+            width: 100%;
+        }
+
+        /* Unit Labels (KM/H, MPH, etc.) */
+        .unit {
+            padding: 12px 15px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            min-width: 75px;
+            text-align: right;
+            border-left: 1px solid rgba(157, 140, 181, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <h1>VICE CONVERT</h1>
+
+        <!-- SNELHEID SECTIE -->
+        <div class="section">
+            <h2>Snelheid</h2>
+            <div class="input-group">
+                <input type="number" id="kmh" placeholder="0" step="any">
+                <div class="unit">KM/H</div>
+            </div>
+            <div class="input-group">
+                <input type="number" id="mph" placeholder="0" step="any">
+                <div class="unit">MPH</div>
+            </div>
+        </div>
+
+        <!-- TEMPERATUUR SECTIE -->
+        <div class="section">
+            <h2>Temperatuur</h2>
+            <div class="input-group">
+                <input type="number" id="celsius" placeholder="0" step="any">
+                <div class="unit">°C</div>
+            </div>
+            <div class="input-group">
+                <input type="number" id="fahrenheit" placeholder="0" step="any">
+                <div class="unit">°F</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handige helper om decimalen netjes te houden (max 2, tenzij heel klein)
+        function roundValue(val) {
+            if (isNaN(val) || val === 0) return '';
+            return parseFloat(val.toFixed(2));
+        }
+
+        // --- Snelheid Logica ---
+        const kmhInput = document.getElementById('kmh');
+        const mphInput = document.getElementById('mph');
+
+        kmhInput.addEventListener('input', () => {
+            const kmh = parseFloat(kmhInput.value);
+            mphInput.value = kmhInput.value === '' ? '' : roundValue(kmh * 0.621371);
+        });
+
+        mphInput.addEventListener('input', () => {
+            const mph = parseFloat(mphInput.value);
+            kmhInput.value = mphInput.value === '' ? '' : roundValue(mph * 1.60934);
+        });
+
+        // --- Temperatuur Logica ---
+        const celsiusInput = document.getElementById('celsius');
+        const fahrenheitInput = document.getElementById('fahrenheit');
+
+        celsiusInput.addEventListener('input', () => {
+            const c = parseFloat(celsiusInput.value);
+            fahrenheitInput.value = celsiusInput.value === '' ? '' : roundValue((c * 9/5) + 32);
+        });
+
+        fahrenheitInput.addEventListener('input', () => {
+            const f = parseFloat(fahrenheitInput.value);
+            celsiusInput.value = fahrenheitInput.value === '' ? '' : roundValue((f - 32) * 5/9);
+        });
+    </script>
+</body>
+</html>
