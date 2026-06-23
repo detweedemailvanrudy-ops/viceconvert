@@ -209,9 +209,8 @@
         // Registreer de Service Worker voor PWA functionaliteit
         if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        // Dit pakt automatisch de juiste submap op GitHub Pages
-        navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('Service Worker geregistreerd!', reg))
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+            .then(reg => console.log('Service Worker geregistreerd met scope:', reg.scope))
             .catch(err => console.log('Service Worker gefaald:', err));
     });
 }
