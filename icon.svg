@@ -1,16 +1,42 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" rx="100" fill="#0b0713"/>
+  <defs>
+    <linearGradient id="gta6-sunset" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18042c" />    <stop offset="40%" stop-color="#3c0044" />   <stop offset="70%" stop-color="#ff007f" />   <stop offset="95%" stop-color="#ff6a00" />   <stop offset="100%" stop-color="#ffb300" />  </linearGradient>
+    
+    <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="110" fill="url(#gta6-sunset)"/>
   
-  <circle cx="256" cy="256" r="180" fill="none" stroke="#ff007f" stroke-width="8" opacity="0.3"/>
-  <circle cx="256" cy="256" r="170" fill="none" stroke="#00f0ff" stroke-width="4" opacity="0.5"/>
-  
-  <g stroke="#00f0ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <path d="M256 400 Q240 280 220 180" stroke="#ff007f" stroke-width="14"/>
-    <path d="M220 180 Q140 160 100 220"/>
-    <path d="M220 180 Q150 110 120 140"/>
-    <path d="M220 180 Q220 80 180 100"/>
-    <path d="M220 180 Q290 80 332 100"/>
-    <path d="M220 180 Q290 110 392 140"/>
-    <path d="M220 180 Q300 160 412 220"/>
+  <g opacity="0.15">
+    <circle cx="256" cy="230" r="130" fill="#fff" />
+    <rect x="100" y="190" width="312" height="6" fill="#18042c" />
+    <rect x="100" y="220" width="312" height="10" fill="#18042c" />
+    <rect x="100" y="250" width="312" height="14" fill="#18042c" />
+    <rect x="100" y="280" width="312" height="18" fill="#18042c" />
+  </g>
+
+  <g filter="url(#neon-glow)">
+    <path d="M266 420 Q240 290 225 175" stroke="#ffffff" stroke-width="16" stroke-linecap="round" fill="none"/>
+    <path d="M266 420 Q240 290 225 175" stroke="#00f0ff" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.4"/>
+    
+    <g stroke="#ffffff" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M225 175 Q130 150 90 220"/>
+      <path d="M225 175 Q140 90 110 130"/>
+      <path d="M225 175 Q225 65 180 90"/>
+      <path d="M225 175 Q310 65 355 90"/>
+      <path d="M225 175 Q310 90 340 130"/>
+      <path d="M225 175 Q320 150 360 220"/>
+    </g>
+    
+    <g stroke="#00f0ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6">
+      <path d="M225 175 Q130 150 90 220"/>
+      <path d="M225 175 Q140 90 110 130"/>
+      <path d="M225 175 Q310 90 340 130"/>
+      <path d="M225 175 Q320 150 360 220"/>
+    </g>
   </g>
 </svg>

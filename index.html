@@ -46,7 +46,7 @@
             display: block;
             position: fixed;
             top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 10, 36, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background: linear-gradient(rgba(18, 10, 36, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.03));
             z-index: 0;
             background-size: 100% 4px, 6px 100%;
             pointer-events: none;
@@ -128,6 +128,7 @@
             box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
         }
 
+        /* Afwisselende focuskleuren per sectie voor dynamiek */
         .section:nth-child(even) .input-group:focus-within {
             border-color: var(--neon-pink);
             box-shadow: 0 0 12px rgba(255, 0, 127, 0.6);
@@ -203,17 +204,41 @@
                 </div>
             </div>
         </div>
+
+        <div class="section">
+            <h2>Inhoud</h2>
+            <div class="input-group">
+                <input type="number" id="liter" placeholder="0" step="any">
+                <div class="unit">Liter</div>
+            </div>
+            <div class="input-group">
+                <input type="number" id="gallon" placeholder="0" step="any">
+                <div class="unit">Gal (US)</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Gewicht</h2>
+            <div class="input-group">
+                <input type="number" id="kilo" placeholder="0" step="any">
+                <div class="unit">Kilo</div>
+            </div>
+            <div class="input-group">
+                <input type="number" id="lbs" placeholder="0" step="any">
+                <div class="unit">LBS</div>
+            </div>
+        </div>
     </div>
 
     <script>
         // Registreer de Service Worker voor PWA functionaliteit
         if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js', { scope: './' })
-            .then(reg => console.log('Service Worker geregistreerd met scope:', reg.scope))
-            .catch(err => console.log('Service Worker gefaald:', err));
-    });
-}
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js', { scope: './' })
+                    .then(reg => console.log('Service Worker geregistreerd met scope:', reg.scope))
+                    .catch(err => console.log('Service Worker gefaald:', err));
+            });
+        }
 
         function roundValue(val, decimals = 2) {
             if (isNaN(val) || val === 0) return '';
@@ -282,6 +307,34 @@
 
         feetInput.addEventListener('input', convertImperialToMetric);
         inchesInput.addEventListener('input', convertImperialToMetric);
+
+        // --- Inhoud Logica ---
+        const literInput = document.getElementById('liter');
+        const gallonInput = document.getElementById('gallon');
+
+        literInput.addEventListener('input', () => {
+            const lit = parseFloat(literInput.value);
+            gallonInput.value = literInput.value === '' ? '' : roundValue(lit * 0.264172);
+        });
+
+        gallonInput.addEventListener('input', () => {
+            const gal = parseFloat(gallonInput.value);
+            literInput.value = gallonInput.value === '' ? '' : roundValue(gal * 3.78541);
+        });
+
+        // --- Gewicht Logica ---
+        const kiloInput = document.getElementById('kilo');
+        const lbsInput = document.getElementById('lbs');
+
+        kiloInput.addEventListener('input', () => {
+            const kg = parseFloat(kiloInput.value);
+            lbsInput.value = kiloInput.value === '' ? '' : roundValue(kg * 2.20462);
+        });
+
+        lbsInput.addEventListener('input', () => {
+            const pound = parseFloat(lbsInput.value);
+            kiloInput.value = lbsInput.value === '' ? '' : roundValue(pound * 0.453592);
+        });
     </script>
 </body>
 </html>
